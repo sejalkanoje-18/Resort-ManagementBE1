@@ -3,7 +3,7 @@ package com.example.rrms.controller;
 import com.example.rrms.dto.CreateTenantRequest;
 import com.example.rrms.dto.CreateUserRequest;
 import com.example.rrms.dto.CreatedUserResponse;
-import com.example.rrms.enums.Role;
+import com.example.rrms.domain.Role;
 import com.example.rrms.service.UserProvisioningService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
