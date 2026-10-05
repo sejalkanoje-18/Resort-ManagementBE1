@@ -1,4 +1,4 @@
-package com.example.rrms.enums;
+package com.example.rrms.domain;
 
 public enum TenantStatus {
     ACTIVE,
