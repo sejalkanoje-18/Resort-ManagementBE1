@@ -3,22 +3,16 @@ package com.example.rrms.service;
 import com.example.rrms.config.SecurityProperties;
 import com.example.rrms.domain.Role;
 import com.example.rrms.domain.TenantStatus;
-import com.example.rrms.domain.UserStatus;
-import com.example.rrms.repository.TenantRepository;
-import com.example.rrms.repository.UserRepository;
 import com.example.rrms.security.mfa.MfaService;
 import com.example.rrms.security.user.CustomUserDetailsService;
 import com.example.rrms.security.user.UserPrincipal;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.Password;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -38,7 +32,8 @@ public class AuthService {
     private final CustomUserDetailsService userDetailsService;
     private final SecurityProperties props;
 
-
+    //** no rollback: the fails-attenpt counter must be save
+    even though we throw*/
     @Transactional(noRollbackFor = AuthenticationException.class)
     public AuthResponse login(LoginRequest req) {
 
