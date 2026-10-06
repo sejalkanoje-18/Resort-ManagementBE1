@@ -28,14 +28,21 @@ public class JwtService {
     private final SecurityProperties.Jwt props;
     private final SecretKey key;
 
-    public JwtService(SecurityProperties properties) {
-        this.props = properties.jwt();
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(props.secret()));
+    public JwtService(
+            SecurityProperties properties) {
+        props = properties.jwt();
+
+        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(props.secret()));
     }
 
     public String generateAccessToken(UserPrincipal p) {
-        long minutes = p.getRole() == Role.GUEST ? props.guestAccessTokenMinutes() : props.accessTokenMinutes();
+
+        long minutes = p.getRole() == Role.GUEST
+                ? props.guestAccessTokenMinutes()
+                : props.accessTokenMinutes();
+
         Instant now = Instant.now();
+
         return Jwts.builder()
                 .issuer(props.issuer())
                 .subject(String.valueOf(p.getId()))
@@ -43,23 +50,9 @@ public class JwtService {
                 .claim("purpose", PURPOSE_ACCESS)
                 .claim("tenantId", p.getTenantId())                    // null for SUPER_ADMIN (claim omitted)
                 .claim("role", p.getRole().name())
-                .claim("staffType", p.getStaffType() == null ? null : p.getStaffType().name())
                 .claim("tokenVersion", p.getTokenVersion())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(minutes, ChronoUnit.MINUTES)))
-                .signWith(key)
-                .compact();
-    }
-
-    /** Short-lived token proving "password was correct, OTP still pending". Cannot call any API. */
-    public String generateMfaToken(User u) {
-        Instant now = Instant.now();
-        return Jwts.builder()
-                .issuer(props.issuer())
-                .subject(String.valueOf(u.getId()))
-                .claim("purpose", PURPOSE_MFA)
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(props.mfaTokenMinutes(), ChronoUnit.MINUTES)))
                 .signWith(key)
                 .compact();
     }
@@ -74,8 +67,4 @@ public class JwtService {
                 .getPayload();
     }
 
-    public static Long longClaim(Claims c, String name) {
-        Object v = c.get(name);
-        return v == null ? null : ((Number) v).longValue();
-    }
 }
