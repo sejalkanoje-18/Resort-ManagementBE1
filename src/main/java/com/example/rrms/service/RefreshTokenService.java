@@ -1,6 +1,7 @@
 package com.example.rrms.service;
 
 import com.example.rrms.config.SecurityProperties;
+import com.example.rrms.domain.RefreshToken;
 import com.example.rrms.domain.UserStatus;
 import com.example.rrms.repository.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
@@ -9,9 +10,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import javax.security.sasl.AuthenticationException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.HexFormat;
 
 @Service

@@ -5,18 +5,13 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.nio.file.AccessDeniedException;
-<<<<<<< HEAD
-import java.util.Optional;
-
-=======
->>>>>>> 12b840ac6ed845ba99e13c1971a58b630263be73
 
 public final class CurrentUser {
 
     private CurrentUser() {
     }
 
-    public static UserPrincipal get() {
+    public static UserPrincipal get() throws AccessDeniedException  {
         Authentication a = SecurityContextHolder
                 .getContext()
                 .getAuthentication();
@@ -28,7 +23,7 @@ public final class CurrentUser {
         throw new AccessDeniedException("Not authenticated");
     }
 
-    public static Long tenantId() {
+    public static Long tenantId() throws AccessDeniedException {
         Long id = get().getTenantId();
 
         if (id == null) {

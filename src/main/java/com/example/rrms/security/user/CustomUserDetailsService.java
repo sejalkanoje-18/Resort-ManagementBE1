@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public UserPrincipal loadUserById(Long id) {
+    public static UserPrincipal loadUserById(Long id) {
         User u = users.findById(id)                       // OK here: filter not enabled yet, JWT not trusted yet
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 

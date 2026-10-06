@@ -21,6 +21,8 @@ import java.util.Objects;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private JwtService jwtService;
+
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain)
@@ -47,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
             // 2. Load the current truth from the DB
-            UserPrincipal p = userDetailsService.loadUserById(Long.valueOf(c.getSubject()));
+            UserPrincipal p = CustomUserDetailsService.loadUserById(Long.valueOf(c.getSubject()));
 
             // 3. Cross-check token vs DB
             if (!p.isEnabled() || !p.isAccountNonLocked()) {
