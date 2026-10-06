@@ -2,28 +2,33 @@ package com.example.rrms.service;
 
 import com.example.rrms.config.SecurityProperties;
 import com.example.rrms.domain.RefreshToken;
+import com.example.rrms.domain.User;
 import com.example.rrms.domain.UserStatus;
 import com.example.rrms.repository.RefreshTokenRepository;
-import jakarta.transaction.Transactional;
+import com.example.rrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.sasl.AuthenticationException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.HexFormat;
 
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
+
     private final RefreshTokenRepository repo;
     private final UserRepository users;
     private final SecurityProperties props;
-    private final SecureRandom random =  new SecureRandom();
+    private final SecureRandom random = new SecureRandom();
 
     @Transactional
     public String issue(User user) {
@@ -61,11 +66,15 @@ public class RefreshTokenService {
     }
 
     @Transactional
-    public void revokeAll(Long userId) { repo.revokeAllForUser(userId); }
+    public void revokeAll(Long userId) {
+        repo.revokeAllForUser(userId);
+    }
 
     private static String sha256(String s) {
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(s.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException e) { throw new IllegalStateException(e); }
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
     }
 }

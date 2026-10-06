@@ -6,20 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "tenants", uniqueConstraints = @UniqueConstraint(
-        name = "uk_tenant_name",
-        columnNames = "code" ))
-@Setter
+        name = "uk_tenant_code",
+        columnNames = "code"))
 @Getter
+@Setter
 @NoArgsConstructor
 public class Tenant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, length = 50)
     private String code;
@@ -29,10 +28,10 @@ public class Tenant {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TenantStatus status;
+    private TenantStatus status = TenantStatus.ACTIVE;
 
     private Long createdBy;
 
     @Column(nullable = false, updatable = false)
-    private Instant createdAt =  Instant.now();
+    private Instant createdAt = Instant.now();
 }

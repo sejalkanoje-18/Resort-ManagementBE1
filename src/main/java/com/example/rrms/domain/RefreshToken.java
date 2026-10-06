@@ -6,36 +6,35 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "refresh_tokens",
         indexes = @Index(
-        name = "idx_rt_hash",
-        columnList = "tokenHash",
-        unique = true))
+                name = "idx_rt_hash",
+                columnList = "tokenHash",
+                unique = true))
 @Getter
 @Setter
 @NoArgsConstructor
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private Long userId;
 
-    private Long  tenantId;
+    private Long tenantId;
 
     @Column(nullable = false, length = 64)
-    private String tokenHash; //SHA-256, never raw token
+    private String tokenHash; // SHA-256
 
     @Column(nullable = false)
     private Instant expiresAt;
 
     private boolean revoked;
 
+    @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
-
 }

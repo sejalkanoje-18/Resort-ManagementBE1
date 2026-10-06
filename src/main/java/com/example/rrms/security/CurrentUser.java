@@ -1,15 +1,11 @@
 package com.example.rrms.security;
 
 import com.example.rrms.security.user.UserPrincipal;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.nio.file.AccessDeniedException;
-<<<<<<< HEAD
 import java.util.Optional;
-
-=======
->>>>>>> 12b840ac6ed845ba99e13c1971a58b630263be73
 
 public final class CurrentUser {
 
@@ -17,26 +13,26 @@ public final class CurrentUser {
     }
 
     public static UserPrincipal get() {
-        Authentication a = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        if (a != null && a.getPrincipal()
-                instanceof UserPrincipal p) {
+        Authentication a = SecurityContextHolder.getContext().getAuthentication();
+        if (a != null && a.getPrincipal() instanceof UserPrincipal p) {
             return p;
         }
         throw new AccessDeniedException("Not authenticated");
     }
 
+    public static Optional<UserPrincipal> optional() {
+        Authentication a = SecurityContextHolder.getContext().getAuthentication();
+        if (a != null && a.getPrincipal() instanceof UserPrincipal p) {
+            return Optional.of(p);
+        }
+        return Optional.empty();
+    }
+
     public static Long tenantId() {
         Long id = get().getTenantId();
-
         if (id == null) {
             throw new AccessDeniedException("No tenant context");
         }
-
         return id;
     }
 }
-
-

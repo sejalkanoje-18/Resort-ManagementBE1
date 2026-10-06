@@ -12,27 +12,28 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class TaskController {
+
     private final TaskService svc;
 
     @PreAuthorize("hasAuthority('TASK_ASSIGN')")
     @PutMapping("/api/management/tasks/{id}/assign/{staffId}")
-    public Task assign(@PathVariable Long id, @PathVariable Long staffId){
+    public Task assign(@PathVariable Long id, @PathVariable Long staffId) {
         return svc.assign(id, staffId);
     }
 
     @PreAuthorize("hasAuthority('TASK_VERIFY')")
-    @PutMapping("/api/management/tasks/{id}/reject")
-    public Task reject(@PathVariable Long id){
+    @PutMapping("/api/management/tasks/{id}/verify")
+    public Task verify(@PathVariable Long id) {
         return svc.verify(id);
     }
 
     @PreAuthorize("hasAuthority('TASK_REJECT')")
     @PutMapping("/api/management/tasks/{id}/reject")
-    public Task reject(@PathVariable Long id, @RequestBody Map<String, String> body){
+    public Task reject(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return svc.reject(id, body.get("reason"));
     }
 
-    @PreAuthorize("hasAuthority(TASK_VIEW_ASSIGNED)")
+    @PreAuthorize("hasAuthority('TASK_VIEW_ASSIGNED')")
     @GetMapping("/api/staff/tasks")
     public List<Task> myTasks() {
         return svc.myTasks();
@@ -40,13 +41,13 @@ public class TaskController {
 
     @PreAuthorize("hasAuthority('TASK_START')")
     @PutMapping("/api/staff/tasks/{id}/start")
-    public Task start(@PathVariable Long id){
+    public Task start(@PathVariable Long id) {
         return svc.start(id);
     }
 
     @PreAuthorize("hasAuthority('TASK_COMPLETE')")
     @PutMapping("/api/staff/tasks/{id}/complete")
-    public Task complete(@PathVariable Long id){
+    public Task complete(@PathVariable Long id) {
         return svc.complete(id);
     }
 }

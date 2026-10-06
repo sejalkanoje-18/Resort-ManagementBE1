@@ -1,12 +1,12 @@
 package com.example.rrms.service;
 
+import com.example.rrms.domain.Role;
+import com.example.rrms.domain.StaffType;
+import com.example.rrms.domain.Tenant;
+import com.example.rrms.domain.User;
 import com.example.rrms.dto.CreateTenantRequest;
 import com.example.rrms.dto.CreateUserRequest;
 import com.example.rrms.dto.CreatedUserResponse;
-import com.example.rrms.entity.Tenant;
-import com.example.rrms.entity.User;
-import com.example.rrms.domain.Role;
-import com.example.rrms.domain.StaffType;
 import com.example.rrms.repository.TenantRepository;
 import com.example.rrms.repository.UserRepository;
 import com.example.rrms.security.CurrentUser;

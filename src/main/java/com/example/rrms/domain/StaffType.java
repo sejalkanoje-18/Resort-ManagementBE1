@@ -4,5 +4,5 @@ public enum StaffType {
     RECEPTIONIST,
     HOUSEKEEPING,
     MAINTENANCE,
-    GARDNER
+    GARDENER
 }

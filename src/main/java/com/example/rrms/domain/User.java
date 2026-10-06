@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Filter;
 
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users",
@@ -17,19 +16,18 @@ import java.util.UUID;
        indexes = @Index(
                name = "idx_user_tenant",
                columnList = "tenant_id"))
-@Filter(name = "tenantFilter",
-        condition = "tenant_id = :tenantId")
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 @Getter
 @Setter
 @NoArgsConstructor
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "tenant_id")
-    private Long tenantId;  //null only for SUPER_ADMIN
+    private Long tenantId; // null only for SUPER_ADMIN
 
     @Column(nullable = false)
     private String name;
@@ -38,7 +36,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String passwordHash; //BCrypt only
+    private String passwordHash; // BCrypt hash
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -61,7 +59,7 @@ public class User {
 
     private int failedAttempts;
 
-    private Instant LockedUntil;
+    private Instant lockedUntil;
 
     private int tokenVersion = 0;
 
@@ -69,5 +67,4 @@ public class User {
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
-
 }

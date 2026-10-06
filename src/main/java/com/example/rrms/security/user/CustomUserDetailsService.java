@@ -1,17 +1,13 @@
 package com.example.rrms.security.user;
 
-import com.example.rrms.security.user.UserPrincipal;
-import com.example.rrms.tenant.entity.TenantStatus;
-import com.example.rrms.tenant.repository.TenantRepository;
-import com.example.rrms.auth.entity.User;
-import com.example.rrms.auth.repository.UserRepository;
-
+import com.example.rrms.domain.TenantStatus;
+import com.example.rrms.domain.User;
+import com.example.rrms.repository.TenantRepository;
+import com.example.rrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +26,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public static UserPrincipal loadUserById(Long id) {
-        User u = users.findById(id)                       // OK here: filter not enabled yet, JWT not trusted yet
+    public UserPrincipal loadUserById(Long id) {
+        User u = users.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         boolean tenantActive = true;

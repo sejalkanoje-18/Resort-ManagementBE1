@@ -9,11 +9,12 @@ import java.util.Set;
 import static com.example.rrms.security.Permission.*;
 
 public final class PermissionRegistry {
+
     private PermissionRegistry() {
     }
 
     public static Set<Permission> resolve(Role role, StaffType staffType) {
-        return switch(role) {
+        return switch (role) {
             case SUPER_ADMIN -> EnumSet.of(TENANT_CREATE, TENANT_VIEW, TENANT_UPDATE, OWNER_CREATE, PLATFORM_AUDIT_VIEW);
 
             case OWNER -> EnumSet.of(REVENUE_VIEW, REPORT_VIEW, ROLE_MANAGE, RESORT_CONFIG,
@@ -25,12 +26,11 @@ public final class PermissionRegistry {
                     BOOKING_CREATE, BOOKING_VIEW, BOOKING_UPDATE);
 
             case STAFF -> {
-                if(staffType == null) yield EnumSet.noneOf(Permission.class);
+                if (staffType == null) yield EnumSet.noneOf(Permission.class);
                 yield switch (staffType) {
                     case RECEPTIONIST -> EnumSet.of(GUEST_CREATE, GUEST_VIEW, BOOKING_CREATE,
                             BOOKING_VIEW, BOOKING_MANAGE, CHECK_IN, CHECK_OUT);
-
-                    case HOUSEKEEPING, MAINTENANCE, GARDNER -> EnumSet.of(TASK_VIEW_ASSIGNED, TASK_START, TASK_UPDATE, TASK_COMPLETE);
+                    case HOUSEKEEPING, MAINTENANCE, GARDENER -> EnumSet.of(TASK_VIEW_ASSIGNED, TASK_START, TASK_UPDATE, TASK_COMPLETE);
                 };
             }
 
