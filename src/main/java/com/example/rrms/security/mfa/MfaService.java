@@ -1,4 +1,11 @@
 package com.example.rrms.security.mfa;
 
-public class MfaService {
+import org.springframework.security.core.userdetails.User;
+
+public interface MfaService {
+
+    boolean isRequired(User user);
+    boolean verify(User user, String code);
 }
+
+

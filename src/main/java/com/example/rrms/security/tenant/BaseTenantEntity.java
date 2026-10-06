@@ -36,7 +36,7 @@ public abstract class BaseTenantEntity {
     @PrePersist
     void requireTenant() {
         if(tenantId == null) {
-            throw new IllegalStateException("tenantId ");
+            throw new IllegalStateException("tenantId must be set before saving");
         }
     }
 }
