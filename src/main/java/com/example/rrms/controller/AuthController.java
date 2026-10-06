@@ -18,20 +18,25 @@ public class AuthController {
     private final AuthService auth;
 
     @PostMapping("/login")
-    public AuthResponse login( @Valid @RequestBody LoginRequests)
-    {return auth.login(r);}
+    public AuthResponse login( @Valid @RequestBody LoginRequest r) {
+        return auth.login(r);
+    }
 
    @PostMapping("/mfa/verify")
     public AuthResponse mfa (@Valid @RequestBody
-    MfaVerifyRequest r) {return auth.verifyMfa(r);}
+    MfaVerifyRequest r) {
+        return auth.verifyMfa(r);
+    }
 
     @PostMapping("/refresh")
-    public AuthResponse refresh(@Valid @RequestBody
-                                RefreshRequest r ){ return auth.refresh(r); }
+    public AuthResponse refresh(@Valid @RequestBody RefreshRequest r ){
+        return auth.refresh(r);
+    }
 
     @PostMapping("/logout")
     public void logout(){
-        auth.logout(CurrentUser.get().getId());}
+        auth.logout(CurrentUser.get().getId());
+    }
 
     @PostMapping("/change-password")
     public void changePassword(@Valid @RequestBody ChangePasswordRequest r) {
