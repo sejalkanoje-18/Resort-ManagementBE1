@@ -7,7 +7,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
-import static javax.swing.UIManager.get;
 
 public final class CurrentUser {
     private CurrentUser() {}
