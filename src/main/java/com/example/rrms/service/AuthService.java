@@ -3,16 +3,16 @@ package com.example.rrms.service;
 import com.example.rrms.config.SecurityProperties;
 import com.example.rrms.domain.Role;
 import com.example.rrms.domain.TenantStatus;
+import com.example.rrms.security.mfa.MfaService;
 import com.example.rrms.security.user.CustomUserDetailsService;
 import com.example.rrms.security.user.UserPrincipal;
 import io.jsonwebtoken.security.Password;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.Security;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -23,12 +23,11 @@ public class AuthService {
             "$2a$12$abcdefghijklmnopqrstuuJ1VQ0qQnXo4w5m9V5k0n3rYbq3S6yJi";
 
     private final UserRepository users;
-    private final TenantRepository tenents;
+    private final TenantRepository tenants;
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokens;
-    privatefinal MfaService mfa;
-    private final AuditService audit;
+    private final MfaService mfa;
     private final AuditService audit;
     private final CustomUserDetailsService userDetailsService;
     private final SecurityProperties props;

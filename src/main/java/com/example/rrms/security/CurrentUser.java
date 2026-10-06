@@ -24,7 +24,11 @@ public final class CurrentUser {
         throw new AccessDeniedException("Not authenticated");
     }
 
+<<<<<<< HEAD
     public static Long tenantId() throws AccessDeniedException {
+=======
+    public static Long tenantId() throws AccessDeniedException{
+>>>>>>> 6b5de6a5108c53c4de0273ae466a3b5a935f5bbf
         Long id = get().getTenantId();
 
         if (id == null) {
