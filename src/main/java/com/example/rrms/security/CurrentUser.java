@@ -5,11 +5,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.nio.file.AccessDeniedException;
-<<<<<<< HEAD
-import java.util.Optional;
-
-=======
->>>>>>> 12b840ac6ed845ba99e13c1971a58b630263be73
 
 public final class CurrentUser {
 
