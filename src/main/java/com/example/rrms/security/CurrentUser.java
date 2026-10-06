@@ -5,28 +5,38 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.nio.file.AccessDeniedException;
+<<<<<<< HEAD
 import java.util.Optional;
 
+=======
+>>>>>>> 12b840ac6ed845ba99e13c1971a58b630263be73
 
 public final class CurrentUser {
-    private CurrentUser() {}
-    public static Optional <UserPrincipal> optional(){
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
-        if(auth != null && auth.getPrincipal() instanceof
-        UserPrincipal p) return Optional.of(p);
-        return Optional.empty();
-    }
-    public static UserPrincipal get() {
-        return optional().orElseThrow(() -> new AccessDeniedException("Not authenticated"));
+
+    private CurrentUser() {
     }
 
-    /** Tenant of the caller. Throws for SUPER_ADMIN (who has no tenant). */
+    public static UserPrincipal get() {
+        Authentication a = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (a != null && a.getPrincipal()
+                instanceof UserPrincipal p) {
+            return p;
+        }
+        throw new AccessDeniedException("Not authenticated");
+    }
+
     public static Long tenantId() {
-        Long t = get().getTenantId();
-        if (t == null) throw new AccessDeniedException("No tenant context");
-        return t;
+        Long id = get().getTenantId();
+
+        if (id == null) {
+            throw new AccessDeniedException("No tenant context");
+        }
+
+        return id;
     }
-    }
+}
 
 

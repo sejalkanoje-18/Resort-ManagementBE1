@@ -1,11 +1,14 @@
 package com.example.rrms.security.jwt;
 
 import com.example.rrms.security.user.CustomUserDetailsService;
+import com.example.rrms.security.user.UserPrincipal;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,69 +17,62 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.net.http.HttpHeaders;
+import java.util.Objects;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtService jwtService;
-    private final CustomUserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtService jwtService,
-                                   CustomUserDetailsService uds ){
-        this.jwtService = jwtService;
-        this.userDetailsService = uds;
-    }
-    @Override
-    protected void doFilterInternal(HttpServletRequest reuqest,
+    protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain chain) throws
-            ServletException , IOException {
+                                    FilterChain chain)
+            throws ServletException, IOException {
+
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(header == null || !header.startWith("Bearer")) {
+
+        if(header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
 
         try{
-            claims claims =
+                Claims c =
                     jwtService.parse(header.substring(7));
 
             //1.only Access tokens authenticate API calls (an
             // MFA token must not work here)
                           if
-                          (!jwtService.PURPOSE_ACCESS.equals(claims.get("purpose",
+                          (!jwtService.PURPOSE_ACCESS.equals(c.get("purpose",
                                   String.class))) {
                               throw new JwtException("Wrong token Purpose");
                           }
 
 
             // 2. Load the current truth from the DB
-            UserPrincipal principal = userDetailsService.loadUserById(Long.valueOf(claims.getSubject()));
+            UserPrincipal p = userDetailsService.loadUserById(Long.valueOf(c.getSubject()));
 
             // 3. Cross-check token vs DB
-            if (!principal.isEnabled() || !principal.isAccountNonLocked()) {
+            if (!p.isEnabled() || !p.isAccountNonLocked()) {
                 throw new JwtException("Account disabled / tenant suspended / locked");
             }
-            Long tokenTenant = JwtService.longClaim(claims, "tenantId");
-            if (!Objects.equals(tokenTenant, principal.getTenantId())) {
+            Long tokenTenant = ((Number) c.get("tenantId"))
+                    .longValue();
+
+            if (!Objects.equals(
+                    tokenTenant, p.getTenantId())) {
                 throw new JwtException("Tenant mismatch");
             }
-            Long tokenVersion = JwtService.longClaim(claims, "tokenVersion");
-            if (tokenVersion == null || tokenVersion.intValue() != principal.getTokenVersion()) {
+
+            Long version = ((Number) c.get("tokenVersion"))
+                    .longValue();
+
+            if (version.intValue()!= p.getTokenVersion()) {
                 throw new JwtException("Token revoked");
             }
 
-            // 4. Force password change before anything else
-            if (principal.isMustChangePassword()
-                    && !request.getRequestURI().equals("/api/auth/change-password")) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\":\"PASSWORD_CHANGE_REQUIRED\"}");
-                return;
-            }
-
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            SecurityContextHolder
+                    .getContext()
+                    .setAuthentication(
+                            new UsernamePasswordAuthenticationToken(
+                                    p, null, p.getAuthorities()));
 
         } catch (JwtException | IllegalArgumentException | UsernameNotFoundException ex) {
             SecurityContextHolder.clearContext();   // leave unauthenticated -> entry point returns 401
