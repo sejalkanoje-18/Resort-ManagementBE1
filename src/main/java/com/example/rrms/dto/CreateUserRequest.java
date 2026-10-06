@@ -1,6 +1,6 @@
 package com.example.rrms.dto;
 
-import com.example.rrms.enums.StaffType;
+import com.example.rrms.domain.StaffType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

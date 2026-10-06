@@ -1,7 +1,7 @@
 package com.example.rrms.service;
 
-import com.example.rrms.enums.Role;
-import com.example.rrms.enums.StaffType;
+import com.example.rrms.domain.Role;
+import com.example.rrms.domain.StaffType;
 import com.example.rrms.security.user.UserPrincipal;
 
 final class CreationPolicy {

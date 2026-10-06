@@ -1,6 +1,6 @@
 package com.example.rrms.dto;
 
-import com.example.rrms.enums.Role;
+import com.example.rrms.domain.Role;
 
 public record CreatedUserResponse(
         Long id,
