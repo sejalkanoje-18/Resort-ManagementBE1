@@ -38,7 +38,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/mfa/verify",
-                                "/api/auth/refresh"
+                                "/api/auth/refresh",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
                         ).permitAll()
 
                         // ---- module (role) gates
