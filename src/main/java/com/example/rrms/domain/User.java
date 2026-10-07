@@ -57,6 +57,8 @@ public class User {
 
     private String mfaSecret;
 
+    private boolean mfaConfirmed;
+
     private int failedAttempts;
 
     private Instant lockedUntil;
