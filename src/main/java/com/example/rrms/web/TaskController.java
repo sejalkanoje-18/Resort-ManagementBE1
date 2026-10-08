@@ -2,6 +2,8 @@ package com.example.rrms.web;
 
 import com.example.rrms.domain.Task;
 import com.example.rrms.service.TaskService;
+import com.example.rrms.dto.CreateTaskRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,18 @@ import java.util.Map;
 public class TaskController {
 
     private final TaskService svc;
+
+    @PreAuthorize("hasAuthority('TASK_CREATE')")
+    @PostMapping("/api/management/tasks")
+    public Task create(@Valid @RequestBody CreateTaskRequest req) {
+        return svc.createTask(req);
+    }
+
+    @PreAuthorize("hasAuthority('TASK_VIEW')")
+    @GetMapping("/api/management/tasks")
+    public List<Task> getTasks() {
+        return svc.getTenantTasks();
+    }
 
     @PreAuthorize("hasAuthority('TASK_ASSIGN')")
     @PutMapping("/api/management/tasks/{id}/assign/{staffId}")

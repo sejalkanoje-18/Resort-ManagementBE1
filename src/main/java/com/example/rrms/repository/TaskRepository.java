@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<Task> findByIdAndTenantId(Long id, Long tenantId);
+    List<Task> findByTenantId(Long tenantId);
     List<Task> findByTenantIdAndAssignedStaffId(Long tenantId, Long assignedStaffId);
 }

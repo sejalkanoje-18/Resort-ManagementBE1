@@ -19,6 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 
+import com.example.rrms.dto.TenantResponse;
+import com.example.rrms.dto.UserResponse;
+import com.example.rrms.security.PermissionRegistry;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserProvisioningService {
@@ -61,6 +69,31 @@ public class UserProvisioningService {
 
         Long tenantId = CurrentUser.tenantId();                     // <- from the token, never from the request
         return persistUser(tenantId, req.name(), req.email(), req.phone(), target, req.staffType(), creator);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TenantResponse> getTenants() {
+        return tenants.findAll().stream()
+                .map(t -> new TenantResponse(t.getId(), t.getCode(), t.getName(), t.getStatus(), t.getCreatedBy(), t.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponse> getUsersByRole(Role role) {
+        Long tenantId = CurrentUser.tenantId();
+        List<User> list = role == null ? users.findByTenantId(tenantId) : users.findByTenantIdAndRole(tenantId, role);
+        return list.stream().map(this::mapUserResponse).collect(Collectors.toList());
+    }
+
+    private UserResponse mapUserResponse(User u) {
+        Set<String> perms = PermissionRegistry.resolve(u.getRole(), u.getStaffType()).stream()
+                .map(Enum::name)
+                .collect(Collectors.toSet());
+        return new UserResponse(
+                u.getId(), u.getTenantId(), u.getName(), u.getEmail(), u.getPhone(),
+                u.getRole(), u.getStaffType(), u.getStatus(), u.isMustChangePassword(),
+                perms, u.getCreatedAt()
+        );
     }
 
     private CreatedUserResponse persistUser(Long tenantId, String name, String email, String phone,

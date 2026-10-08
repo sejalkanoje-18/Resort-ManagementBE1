@@ -18,12 +18,50 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.rrms.dto.CreateTaskRequest;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository tasks;
     private final UserRepository users;
     private final AuditService audit;
+
+    @Transactional
+    public Task createTask(CreateTaskRequest req) {
+        UserPrincipal me = CurrentUser.get();
+        Long tenantId = me.getTenantId();
+
+        Task task = new Task();
+        task.setTenantId(tenantId);
+        task.setTitle(req.title());
+        task.setDepartment(req.department());
+        task.setCreatedBy(me.getId());
+
+        if (req.assignedStaffId() != null) {
+            User staff = users.findByIdAndTenantId(req.assignedStaffId(), tenantId)
+                    .orElseThrow(() -> new EntityNotFoundException("Staff not found"));
+
+            if (staff.getRole() != Role.STAFF || staff.getStatus() != UserStatus.ACTIVE) {
+                throw new IllegalStateException("Staff is not active");
+            }
+            if (staff.getStaffType() != req.department()) {
+                throw new IllegalStateException("Staff type does not match task department");
+            }
+            task.setAssignedStaffId(req.assignedStaffId());
+            task.setStatus(TaskStatus.ASSIGNED);
+        }
+
+        task = tasks.save(task);
+        audit.log(me, "TASK_CREATE", "TASK", task.getId().toString(), "SUCCESS", null);
+        return task;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Task> getTenantTasks() {
+        UserPrincipal me = CurrentUser.get();
+        return tasks.findByTenantId(me.getTenantId());
+    }
 
     @Transactional
     public Task assign(Long taskId, Long staffId) {
