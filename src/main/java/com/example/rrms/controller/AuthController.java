@@ -5,6 +5,7 @@ import com.example.rrms.security.CurrentUser;
 import com.example.rrms.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +41,10 @@ public class AuthController {
     @PostMapping("/change-password")
     public void changePassword(@Valid @RequestBody ChangePasswordRequest r) {
         auth.changePassword(CurrentUser.get().getId(), r);
+    }
+
+    @GetMapping("/me")
+    public UserResponse me() {
+        return auth.getCurrentUser();
     }
 }

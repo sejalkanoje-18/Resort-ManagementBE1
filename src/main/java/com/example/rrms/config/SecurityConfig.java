@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.rrms.common.ApiErrorWriter;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -23,6 +25,7 @@ public class SecurityConfig {
 
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;
+    private final ApiErrorWriter errorWriter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,18 +37,26 @@ public class SecurityConfig {
 
         http.csrf(c -> c.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint((req, res, authEx) -> errorWriter.unauthorized(req, res))
+                        .accessDeniedHandler((req, res, accessEx) -> errorWriter.forbidden(req, res))
+                )
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/mfa/verify",
-                                "/api/auth/refresh"
+                                "/api/auth/refresh",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
                         ).permitAll()
 
                         // ---- module (role) gates
                         .requestMatchers("/api/platform/**").hasRole("SUPER_ADMIN")
                         .requestMatchers("/api/owner/**").hasRole("OWNER")
-                        .requestMatchers("/api/management/**").hasRole("MANAGEMENT")
-                        .requestMatchers("/api/staff/**").hasRole("STAFF")
+                        .requestMatchers("/api/management/**").hasAnyRole("MANAGEMENT", "OWNER")
+                        .requestMatchers("/api/staff/**").hasAnyRole("STAFF", "MANAGEMENT", "OWNER")
+                        .requestMatchers("/api/guests/**").hasAnyRole("MANAGEMENT", "STAFF", "OWNER")
                         .requestMatchers("/api/guest/**").hasRole("GUEST")
 
                         // ---- shared endpoints: gated by @PreAuthorize permissions
