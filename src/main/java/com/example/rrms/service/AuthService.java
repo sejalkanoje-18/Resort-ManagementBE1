@@ -128,16 +128,42 @@ public class AuthService {
         audit.log(user, "PASSWORD_CHANGE", "USER", userId, "SUCCESS", null);
     }
 
+    @Transactional(readOnly = true)
+    public UserResponse getCurrentUser() {
+        UserPrincipal principal = com.example.rrms.security.CurrentUser.get();
+        User user = users.findById(principal.getId())
+                .orElseThrow(() -> new BadCredentialsException("User not found"));
+        java.util.Set<String> permissions = principal.getAuthorities().stream()
+                .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+                .collect(java.util.stream.Collectors.toSet());
+        return new UserResponse(
+                user.getId(),
+                user.getTenantId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getRole(),
+                user.getStaffType(),
+                user.getStatus(),
+                user.isMustChangePassword(),
+                permissions,
+                user.getCreatedAt()
+        );
+    }
+
     // --- helpers
 
     private User resolveUser(LoginRequest req) {
-        if (req.tenantCode() == null || req.tenantCode().isBlank()) {
-            return users.findByEmailAndTenantIdIsNull(req.email())
+        String email = req.email() != null ? req.email().trim().toLowerCase() : "";
+        String code = req.tenantCode() != null ? req.tenantCode().trim() : "";
+
+        if (code.isBlank()) {
+            return users.findByEmailAndTenantIdIsNull(email)
                     .filter(u -> u.getRole() == Role.SUPER_ADMIN).orElse(null);
         }
-        return tenants.findByCode(req.tenantCode())
+        return tenants.findByCode(code)
                 .filter(t -> t.getStatus() == TenantStatus.ACTIVE)
-                .flatMap(t -> users.findByEmailAndTenantId(req.email(), t.getId()))
+                .flatMap(t -> users.findByEmailAndTenantId(email, t.getId()))
                 .filter(u -> u.getRole() != Role.SUPER_ADMIN)
                 .orElse(null);
     }
