@@ -1,10 +1,10 @@
 package com.example.rrms.service;
 
-import com.example.rrms.domain.Role;
+import com.example.rrms.domain.enums.Role;
 import com.example.rrms.domain.modal.Task;
-import com.example.rrms.domain.TaskStatus;
+import com.example.rrms.domain.enums.TaskStatus;
 import com.example.rrms.domain.modal.User;
-import com.example.rrms.domain.UserStatus;
+import com.example.rrms.domain.enums.UserStatus;
 import com.example.rrms.repository.TaskRepository;
 import com.example.rrms.repository.UserRepository;
 import com.example.rrms.security.user.CurrentUser;

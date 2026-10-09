@@ -1,7 +1,7 @@
 package com.example.rrms.service;
 
-import com.example.rrms.domain.Role;
-import com.example.rrms.domain.StaffType;
+import com.example.rrms.domain.enums.Role;
+import com.example.rrms.domain.enums.StaffType;
 import com.example.rrms.domain.modal.Tenant;
 import com.example.rrms.domain.modal.User;
 import com.example.rrms.dto.request.CreateTenantRequest;

@@ -1,6 +1,6 @@
 package com.example.rrms.config;
 
-import com.example.rrms.domain.Role;
+import com.example.rrms.domain.enums.Role;
 import com.example.rrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
