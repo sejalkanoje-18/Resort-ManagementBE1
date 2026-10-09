@@ -1,8 +1,8 @@
 package com.example.rrms.service;
 
 import com.example.rrms.config.SecurityProperties;
-import com.example.rrms.domain.RefreshToken;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.RefreshToken;
+import com.example.rrms.domain.modal.User;
 import com.example.rrms.domain.UserStatus;
 import com.example.rrms.repository.RefreshTokenRepository;
 import com.example.rrms.repository.UserRepository;

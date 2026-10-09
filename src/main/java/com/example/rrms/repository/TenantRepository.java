@@ -1,6 +1,6 @@
 package com.example.rrms.repository;
 
-import com.example.rrms.domain.Tenant;
+import com.example.rrms.domain.modal.Tenant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

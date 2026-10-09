@@ -1,5 +1,8 @@
-package com.example.rrms.domain;
+package com.example.rrms.domain.modal;
 
+import com.example.rrms.domain.Role;
+import com.example.rrms.domain.StaffType;
+import com.example.rrms.domain.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

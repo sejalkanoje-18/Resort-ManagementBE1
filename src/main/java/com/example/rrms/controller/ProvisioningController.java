@@ -1,15 +1,15 @@
 package com.example.rrms.controller;
 
-import com.example.rrms.dto.CreateTenantRequest;
-import com.example.rrms.dto.CreateUserRequest;
-import com.example.rrms.dto.CreatedUserResponse;
+import com.example.rrms.dto.request.CreateTenantRequest;
+import com.example.rrms.dto.request.CreateUserRequest;
+import com.example.rrms.dto.response.CreatedUserResponse;
 import com.example.rrms.domain.Role;
 import com.example.rrms.service.UserProvisioningService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import com.example.rrms.dto.TenantResponse;
-import com.example.rrms.dto.UserResponse;
+import com.example.rrms.dto.response.TenantResponse;
+import com.example.rrms.dto.response.UserResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

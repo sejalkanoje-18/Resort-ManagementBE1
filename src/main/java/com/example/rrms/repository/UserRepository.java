@@ -1,7 +1,7 @@
 package com.example.rrms.repository;
 
 import com.example.rrms.domain.Role;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

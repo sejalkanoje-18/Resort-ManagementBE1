@@ -1,6 +1,6 @@
 package com.example.rrms.repository;
 
-import com.example.rrms.domain.Task;
+import com.example.rrms.domain.modal.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

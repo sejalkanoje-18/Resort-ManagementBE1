@@ -1,8 +1,8 @@
-package com.example.rrms.web;
+package com.example.rrms.controller;
 
-import com.example.rrms.domain.Task;
+import com.example.rrms.domain.modal.Task;
 import com.example.rrms.service.TaskService;
-import com.example.rrms.dto.CreateTaskRequest;
+import com.example.rrms.dto.request.CreateTaskRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

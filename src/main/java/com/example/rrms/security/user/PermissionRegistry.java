@@ -1,12 +1,13 @@
-package com.example.rrms.security;
+package com.example.rrms.security.user;
 
+import com.example.rrms.domain.Permission;
 import com.example.rrms.domain.Role;
 import com.example.rrms.domain.StaffType;
 
 import java.util.EnumSet;
 import java.util.Set;
 
-import static com.example.rrms.security.Permission.*;
+import static com.example.rrms.domain.Permission.*;
 
 public final class PermissionRegistry {
 
