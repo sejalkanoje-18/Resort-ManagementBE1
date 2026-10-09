@@ -1,7 +1,7 @@
 package com.example.rrms.security.mfa;
 
 import com.example.rrms.domain.Role;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 

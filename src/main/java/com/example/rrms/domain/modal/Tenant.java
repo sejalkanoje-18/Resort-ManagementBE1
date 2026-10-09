@@ -1,5 +1,6 @@
-package com.example.rrms.domain;
+package com.example.rrms.domain.modal;
 
+import com.example.rrms.domain.TenantStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

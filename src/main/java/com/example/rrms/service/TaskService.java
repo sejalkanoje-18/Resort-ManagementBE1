@@ -1,13 +1,13 @@
 package com.example.rrms.service;
 
 import com.example.rrms.domain.Role;
-import com.example.rrms.domain.Task;
+import com.example.rrms.domain.modal.Task;
 import com.example.rrms.domain.TaskStatus;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import com.example.rrms.domain.UserStatus;
 import com.example.rrms.repository.TaskRepository;
 import com.example.rrms.repository.UserRepository;
-import com.example.rrms.security.CurrentUser;
+import com.example.rrms.security.user.CurrentUser;
 import com.example.rrms.security.user.UserPrincipal;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
-import com.example.rrms.dto.CreateTaskRequest;
+import com.example.rrms.dto.request.CreateTaskRequest;
 
 @Service
 @RequiredArgsConstructor

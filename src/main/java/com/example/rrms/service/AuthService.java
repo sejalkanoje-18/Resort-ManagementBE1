@@ -3,13 +3,19 @@ package com.example.rrms.service;
 import com.example.rrms.config.SecurityProperties;
 import com.example.rrms.domain.Role;
 import com.example.rrms.domain.TenantStatus;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import com.example.rrms.domain.UserStatus;
-import com.example.rrms.dto.*;
+import com.example.rrms.dto.request.ChangePasswordRequest;
+import com.example.rrms.dto.request.LoginRequest;
+import com.example.rrms.dto.request.MfaVerifyRequest;
+import com.example.rrms.dto.response.AuthResponse;
+import com.example.rrms.dto.response.RefreshRequest;
+import com.example.rrms.dto.response.UserResponse;
 import com.example.rrms.repository.TenantRepository;
 import com.example.rrms.repository.UserRepository;
 import com.example.rrms.security.jwt.JwtService;
 import com.example.rrms.security.mfa.MfaService;
+import com.example.rrms.security.user.CurrentUser;
 import com.example.rrms.security.user.CustomUserDetailsService;
 import com.example.rrms.security.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
@@ -130,7 +136,7 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public UserResponse getCurrentUser() {
-        UserPrincipal principal = com.example.rrms.security.CurrentUser.get();
+        UserPrincipal principal = CurrentUser.get();
         User user = users.findById(principal.getId())
                 .orElseThrow(() -> new BadCredentialsException("User not found"));
         java.util.Set<String> permissions = principal.getAuthorities().stream()

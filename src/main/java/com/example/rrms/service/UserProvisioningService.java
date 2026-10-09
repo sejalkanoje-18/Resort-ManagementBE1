@@ -2,14 +2,14 @@ package com.example.rrms.service;
 
 import com.example.rrms.domain.Role;
 import com.example.rrms.domain.StaffType;
-import com.example.rrms.domain.Tenant;
-import com.example.rrms.domain.User;
-import com.example.rrms.dto.CreateTenantRequest;
-import com.example.rrms.dto.CreateUserRequest;
-import com.example.rrms.dto.CreatedUserResponse;
+import com.example.rrms.domain.modal.Tenant;
+import com.example.rrms.domain.modal.User;
+import com.example.rrms.dto.request.CreateTenantRequest;
+import com.example.rrms.dto.request.CreateUserRequest;
+import com.example.rrms.dto.response.CreatedUserResponse;
 import com.example.rrms.repository.TenantRepository;
 import com.example.rrms.repository.UserRepository;
-import com.example.rrms.security.CurrentUser;
+import com.example.rrms.security.user.CurrentUser;
 import com.example.rrms.security.user.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 
-import com.example.rrms.dto.TenantResponse;
-import com.example.rrms.dto.UserResponse;
-import com.example.rrms.security.PermissionRegistry;
+import com.example.rrms.dto.response.TenantResponse;
+import com.example.rrms.dto.response.UserResponse;
+import com.example.rrms.security.user.PermissionRegistry;
 
 import java.util.List;
 import java.util.Set;

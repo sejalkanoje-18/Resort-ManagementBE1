@@ -1,4 +1,4 @@
-package com.example.rrms.dto;
+package com.example.rrms.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 

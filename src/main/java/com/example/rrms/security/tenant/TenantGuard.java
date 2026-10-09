@@ -1,6 +1,6 @@
 package com.example.rrms.security.tenant;
 
-import com.example.rrms.security.CurrentUser;
+import com.example.rrms.security.user.CurrentUser;
 import org.springframework.stereotype.Component;
 
 @Component("tenantGuard")

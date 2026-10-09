@@ -1,4 +1,4 @@
-package com.example.rrms.security;
+package com.example.rrms.domain;
 
 public enum Permission {
     //platform (SUPER_ADMIN)

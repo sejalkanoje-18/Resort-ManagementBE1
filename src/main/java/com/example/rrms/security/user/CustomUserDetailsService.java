@@ -1,7 +1,7 @@
 package com.example.rrms.security.user;
 
 import com.example.rrms.domain.TenantStatus;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import com.example.rrms.repository.TenantRepository;
 import com.example.rrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

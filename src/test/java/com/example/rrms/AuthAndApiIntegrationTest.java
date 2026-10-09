@@ -1,10 +1,10 @@
 package com.example.rrms;
 
 import com.example.rrms.domain.Role;
-import com.example.rrms.domain.User;
-import com.example.rrms.dto.AuthResponse;
-import com.example.rrms.dto.LoginRequest;
-import com.example.rrms.dto.MfaVerifyRequest;
+import com.example.rrms.domain.modal.User;
+import com.example.rrms.dto.response.AuthResponse;
+import com.example.rrms.dto.request.LoginRequest;
+import com.example.rrms.dto.request.MfaVerifyRequest;
 import com.example.rrms.repository.UserRepository;
 import com.example.rrms.security.jwt.JwtService;
 import com.example.rrms.security.user.CustomUserDetailsService;

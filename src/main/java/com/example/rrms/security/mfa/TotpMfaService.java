@@ -1,6 +1,6 @@
 package com.example.rrms.security.mfa;
 
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import dev.samstevens.totp.code.CodeVerifier;
 import dev.samstevens.totp.code.DefaultCodeGenerator;
 import dev.samstevens.totp.code.DefaultCodeVerifier;

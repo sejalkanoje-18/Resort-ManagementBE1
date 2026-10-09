@@ -2,7 +2,7 @@ package com.example.rrms.security.jwt;
 
 import com.example.rrms.config.SecurityProperties;
 import com.example.rrms.domain.Role;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import com.example.rrms.security.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
