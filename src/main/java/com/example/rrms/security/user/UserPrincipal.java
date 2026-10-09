@@ -1,9 +1,9 @@
 package com.example.rrms.security.user;
 
-import com.example.rrms.domain.Role;
-import com.example.rrms.domain.StaffType;
+import com.example.rrms.domain.enums.Role;
+import com.example.rrms.domain.enums.StaffType;
 import com.example.rrms.domain.modal.User;
-import com.example.rrms.domain.UserStatus;
+import com.example.rrms.domain.enums.UserStatus;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

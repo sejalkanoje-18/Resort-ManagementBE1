@@ -1,6 +1,6 @@
 package com.example.rrms;
 
-import com.example.rrms.domain.Role;
+import com.example.rrms.domain.enums.Role;
 import com.example.rrms.domain.modal.User;
 import com.example.rrms.dto.response.AuthResponse;
 import com.example.rrms.dto.request.LoginRequest;

@@ -1,8 +1,8 @@
 package com.example.rrms.dto.response;
 
-import com.example.rrms.domain.Role;
-import com.example.rrms.domain.StaffType;
-import com.example.rrms.domain.UserStatus;
+import com.example.rrms.domain.enums.Role;
+import com.example.rrms.domain.enums.StaffType;
+import com.example.rrms.domain.enums.UserStatus;
 
 import java.time.Instant;
 import java.util.Set;

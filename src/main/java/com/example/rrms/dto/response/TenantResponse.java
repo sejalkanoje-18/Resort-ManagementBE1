@@ -1,6 +1,6 @@
 package com.example.rrms.dto.response;
 
-import com.example.rrms.domain.TenantStatus;
+import com.example.rrms.domain.enums.TenantStatus;
 
 import java.time.Instant;
 

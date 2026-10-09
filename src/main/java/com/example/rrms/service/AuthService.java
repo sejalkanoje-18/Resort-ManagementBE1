@@ -1,10 +1,10 @@
 package com.example.rrms.service;
 
 import com.example.rrms.config.SecurityProperties;
-import com.example.rrms.domain.Role;
-import com.example.rrms.domain.TenantStatus;
+import com.example.rrms.domain.enums.Role;
+import com.example.rrms.domain.enums.TenantStatus;
 import com.example.rrms.domain.modal.User;
-import com.example.rrms.domain.UserStatus;
+import com.example.rrms.domain.enums.UserStatus;
 import com.example.rrms.dto.request.ChangePasswordRequest;
 import com.example.rrms.dto.request.LoginRequest;
 import com.example.rrms.dto.request.MfaVerifyRequest;
