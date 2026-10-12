@@ -1,6 +1,6 @@
 package com.example.rrms.security.mfa;
 
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 
 public interface MfaService {
 

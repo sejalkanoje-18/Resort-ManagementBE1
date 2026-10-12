@@ -1,4 +1,4 @@
-package com.example.rrms.domain;
+package com.example.rrms.domain.modal;
 
 import jakarta.persistence.*;
 import lombok.Getter;

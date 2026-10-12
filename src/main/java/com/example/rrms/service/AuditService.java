@@ -1,7 +1,7 @@
 package com.example.rrms.service;
 
-import com.example.rrms.domain.AuditLog;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.AuditLog;
+import com.example.rrms.domain.modal.User;
 import com.example.rrms.repository.AuditLogRepository;
 import com.example.rrms.security.user.UserPrincipal;
 import lombok.RequiredArgsConstructor;

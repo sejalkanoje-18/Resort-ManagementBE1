@@ -1,5 +1,7 @@
-package com.example.rrms.domain;
+package com.example.rrms.domain.modal;
 
+import com.example.rrms.domain.enums.StaffType;
+import com.example.rrms.domain.enums.TaskStatus;
 import com.example.rrms.security.tenant.BaseTenantEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

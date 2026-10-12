@@ -1,8 +1,8 @@
-package com.example.rrms.domain;
+package com.example.rrms.domain.enums;
 
 public enum StaffType {
     RECEPTIONIST,
     HOUSEKEEPING,
     MAINTENANCE,
-    GARDENER,
+    GARDENER
 }

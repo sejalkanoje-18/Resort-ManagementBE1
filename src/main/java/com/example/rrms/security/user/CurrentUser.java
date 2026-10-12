@@ -1,6 +1,5 @@
-package com.example.rrms.security;
+package com.example.rrms.security.user;
 
-import com.example.rrms.security.user.UserPrincipal;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

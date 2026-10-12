@@ -1,13 +1,13 @@
 package com.example.rrms.config;
 
-import com.example.rrms.domain.Role;
+import com.example.rrms.domain.enums.Role;
 import com.example.rrms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import com.example.rrms.domain.User;
+import com.example.rrms.domain.modal.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

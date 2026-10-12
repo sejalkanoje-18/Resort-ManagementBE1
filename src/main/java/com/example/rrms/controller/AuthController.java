@@ -1,7 +1,12 @@
 package com.example.rrms.controller;
 
-import com.example.rrms.dto.*;
-import com.example.rrms.security.CurrentUser;
+import com.example.rrms.dto.request.ChangePasswordRequest;
+import com.example.rrms.dto.request.LoginRequest;
+import com.example.rrms.dto.request.MfaVerifyRequest;
+import com.example.rrms.dto.response.AuthResponse;
+import com.example.rrms.dto.response.RefreshRequest;
+import com.example.rrms.dto.response.UserResponse;
+import com.example.rrms.security.user.CurrentUser;
 import com.example.rrms.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
