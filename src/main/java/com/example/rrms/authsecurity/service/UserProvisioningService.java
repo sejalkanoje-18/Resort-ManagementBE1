@@ -41,15 +41,30 @@ public class UserProvisioningService {
     public CreatedUserResponse createTenantWithOwner(CreateTenantRequest req) {
         UserPrincipal creator = CurrentUser.get();
         if (!CreationPolicy.canCreate(creator, Role.OWNER)) throw new AccessDeniedException("Not allowed");
-        if (tenants.existsByCode(req.tenantCode())) throw new IllegalArgumentException("Tenant code already used");
+
+        String code = req.tenantCode() != null ? req.tenantCode().trim().toUpperCase() : "";
+        if (code.isBlank()) {
+            throw new IllegalArgumentException("Resort / Tenant code cannot be blank.");
+        }
+        if (tenants.existsByCode(code)) {
+            throw new IllegalArgumentException("Resort / Tenant code '" + code + "' is already in use. Please choose a different code.");
+        }
+
+        String email = req.ownerEmail() != null ? req.ownerEmail().trim().toLowerCase() : "";
+        if (email.isBlank()) {
+            throw new IllegalArgumentException("Owner email cannot be blank.");
+        }
+        if (users.existsByEmailAndTenantIdIsNull(email)) {
+            throw new IllegalArgumentException("Email '" + email + "' is reserved for the Platform Super Admin.");
+        }
 
         Tenant t = new Tenant();
-        t.setCode(req.tenantCode());
-        t.setName(req.resortName());
+        t.setCode(code);
+        t.setName(req.resortName().trim());
         t.setCreatedBy(creator.getId());
         t = tenants.save(t);
 
-        return persistUser(t.getId(), req.ownerName(), req.ownerEmail(), null, Role.OWNER, null, creator);
+        return persistUser(t.getId(), req.ownerName().trim(), email, null, Role.OWNER, null, creator);
     }
 
     /** OWNER -> MANAGEMENT, MANAGEMENT -> STAFF/GUEST, RECEPTIONIST -> GUEST. Same tenant as creator. */
@@ -74,7 +89,22 @@ public class UserProvisioningService {
     @Transactional(readOnly = true)
     public List<TenantResponse> getTenants() {
         return tenants.findAll().stream()
-                .map(t -> new TenantResponse(t.getId(), t.getCode(), t.getName(), t.getStatus(), t.getCreatedBy(), t.getCreatedAt()))
+                .map(t -> {
+                    User owner = users.findByTenantIdAndRole(t.getId(), Role.OWNER).stream().findFirst().orElse(null);
+                    return new TenantResponse(
+                            t.getId(),
+                            t.getCode(),
+                            t.getName(),
+                            t.getStatus(),
+                            t.getCreatedBy(),
+                            t.getCreatedAt(),
+                            owner != null ? owner.getId() : null,
+                            owner != null ? owner.getName() : "Unassigned",
+                            owner != null ? owner.getEmail() : "N/A",
+                            owner != null ? owner.getPhone() : null,
+                            owner != null ? owner.getStatus() : null
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -98,8 +128,8 @@ public class UserProvisioningService {
 
     private CreatedUserResponse persistUser(Long tenantId, String name, String email, String phone,
                                             Role role, StaffType type, UserPrincipal creator) {
-        if (users.existsByEmailAndTenantId(email, tenantId)) {
-            throw new IllegalArgumentException("Email already exists in this resort");
+        if (users.existsByEmailAndTenantId(email.toLowerCase(), tenantId)) {
+            throw new IllegalArgumentException("Email '" + email + "' is already registered in this resort.");
         }
         String tempPassword = generateTempPassword();
 

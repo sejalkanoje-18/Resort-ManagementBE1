@@ -7,6 +7,8 @@ import com.example.rrms.authsecurity.domain.enums.StaffType;
 import java.util.EnumSet;
 import java.util.Set;
 
+import static com.example.rrms.authsecurity.domain.enums.Permission.*;
+
 public final class PermissionRegistry {
 
     private PermissionRegistry() {

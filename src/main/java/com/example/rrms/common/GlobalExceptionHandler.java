@@ -1,6 +1,8 @@
 package com.example.rrms.common;
 
 
+import com.example.rrms.common.dto.response.ApiResponse;
+import com.example.rrms.common.exception.ApiException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,13 +24,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import javax.security.sasl.AuthenticationException;
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
-import static com.example.rrms.common.ApiResponse.error;
+import java.util.stream.Collectors;
 
-import static org.springframework.http.RequestEntity.method;
+
 
 @Slf4j
 @RestControllerAdvice
@@ -41,9 +43,12 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors()
                 .forEach(fe ->
         fields.putIfAbsent(fe.getField(), fe.getDefaultMessage()));
+        String firstError = fields.entrySet().stream()
+                .map(e -> e.getKey() + ": " + e.getValue())
+                .collect(Collectors.joining("; "));
         return ApiResponse.error(HttpStatus.BAD_REQUEST,
                 "VALIDATION_FAILED",
-                "Validation failed.see 'fieldErrors'.",
+                "Validation failed: " + firstError,
                 req.getRequestURI(), fields);
     }
 
@@ -136,6 +141,10 @@ public class GlobalExceptionHandler {
                         "A record with the same unique value already exists, or required data is missing.", req);
             }
 
+            @ExceptionHandler(IllegalArgumentException.class)
+            public ResponseEntity<ApiResponse<Void>> badArgument (IllegalArgumentException ex, HttpServletRequest req){
+                return error(HttpStatus.BAD_REQUEST, "BAD_REQUEST", ex.getMessage(), req);
+            }
 
             @ExceptionHandler(Exception.class)
             public ResponseEntity<ApiResponse<Void>> unexpected (Exception ex, HttpServletRequest req){

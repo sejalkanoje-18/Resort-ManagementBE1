@@ -163,4 +163,51 @@ class AuthAndApiIntegrationTest {
         mockMvc.perform(get("/api/auth/tenants"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    void testSuperAdminCreateTenantWithOwnerAndFetch() throws Exception {
+        User admin = userRepository.findByEmailAndTenantIdIsNull("admin@rrms.com").orElseThrow();
+        UserPrincipal principal = userDetailsService.loadUserById(admin.getId());
+        String adminToken = jwtService.generateAccessToken(principal);
+
+        // 1. Provision new Resort and Owner
+        com.example.rrms.authsecurity.dto.request.CreateTenantRequest req =
+                new com.example.rrms.authsecurity.dto.request.CreateTenantRequest(
+                        "OCEANIC", "Oceanic Bay Resort", "Captain Nemo", "nemo@oceanic.demo"
+                );
+
+        String createJson = mockMvc.perform(post("/api/platform/tenants")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        com.example.rrms.authsecurity.dto.response.CreatedUserResponse createdUser =
+                objectMapper.readValue(createJson, com.example.rrms.authsecurity.dto.response.CreatedUserResponse.class);
+        assertEquals("nemo@oceanic.demo", createdUser.email());
+        assertEquals(Role.OWNER, createdUser.role());
+        assertNotNull(createdUser.temporaryPassword());
+
+        // 2. Fetch all tenants - verify Oceanic Bay has Captain Nemo as primary owner
+        String tenantsJson = mockMvc.perform(get("/api/platform/tenants")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        java.util.List<com.example.rrms.authsecurity.dto.response.TenantResponse> tenantsList =
+                objectMapper.readValue(tenantsJson, new com.fasterxml.jackson.core.type.TypeReference<>() {});
+
+        var oceanic = tenantsList.stream().filter(t -> "OCEANIC".equals(t.code())).findFirst();
+        assertTrue(oceanic.isPresent());
+        assertEquals("Captain Nemo", oceanic.get().ownerName());
+        assertEquals("nemo@oceanic.demo", oceanic.get().ownerEmail());
+
+        // 3. Attempting to create duplicate tenant code returns 400 Bad Request with friendly error
+        mockMvc.perform(post("/api/platform/tenants")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + adminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isBadRequest());
+    }
 }
