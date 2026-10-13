@@ -1,0 +1,13 @@
+package com.example.rrms.authsecurity.repository;
+
+import com.example.rrms.authsecurity.domain.modal.Task;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    Optional<Task> findByIdAndTenantId(Long id, Long tenantId);
+    List<Task> findByTenantId(Long tenantId);
+    List<Task> findByTenantIdAndAssignedStaffId(Long tenantId, Long assignedStaffId);
+}
